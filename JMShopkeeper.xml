@@ -1,0 +1,121 @@
+<GuiXml>
+    <Controls>
+
+        <!--
+            Main window
+        -->
+        <TopLevelControl name="JMShopkeeperGuiMainWindow" mouseEnabled="true" movable="true" hidden="true">
+            <Dimensions x="1200" y="900" />
+            <Anchor point="TOP" offsetY="50" relativePoint="TOPCENTER" />
+
+            <Controls>
+                <Backdrop name="$(parent)Background" inherits="ZO_ThinBackdrop" />
+                <Backdrop name="$(parent)ResultBackground" inherits="ZO_ThinBackdrop">
+                    <Dimensions x="1180" y="602" />
+                    <Anchor point="TOPLEFT" offsetX="9" offsetY="105" />
+                </Backdrop>
+
+                <!--
+                    Table header
+                -->
+
+                <!--
+                    Main window buttons
+                -->
+
+                <!-- Fetch button -->
+                <Button name="$(parent)FetchButton" inherits="ZO_DefaultButton" text="Fetch">
+                    <Dimensions x="120" y="30" />
+                    <Anchor point="BOTTOMRIGHT" offsetX="-135" offsetY="-20" />
+                </Button>
+
+                <!-- Close button -->
+                <Button name="$(parent)CloseButton" inherits="ZO_DefaultButton" text="Close">
+                    <Dimensions x="120" y="30" />
+                    <Anchor point="BOTTOMRIGHT" offsetX="-5" offsetY="-20" />
+                    <OnClicked>
+                        JMShopkeeperGuiMainWindow:SetHidden(true)
+                    </OnClicked>
+                </Button>
+
+                <!-- Table pagination summary -->
+                <Label name="JMShopkeeperResultPaginationSummary" font="ZoFontGame" color="cfdcbd" wrapMode="ELLIPSIS"
+                       verticalAlignment="CENTER" horizontalAlignment="CENTER">
+                    <Dimensions x="140" y="28" />
+                    <Anchor point="BOTTOMLEFT" relativeTo="$(parent)" offsetY="-60" offsetX="50" />
+                </Label>
+
+            </Controls>
+        </TopLevelControl>
+
+        <!--
+            Result row
+        -->
+        <Button name="JMShopkeeperResultRow" font="ZoFontGame" color="cfdcbd" wrapMode="ELLIPSIS" virtual="true"
+                verticalAlignment="CENTER" horizontalAlignment="LEFT">
+            <Dimensions x="1178" y="28" />
+            <Anchor point="TOPLEFT" relativeTo="JMShopkeeperGuiMainWindowResultBackground" />
+
+            <Controls>
+                <Backdrop name="$(parent)Backgroud" inherits="ZO_ThinBackdrop" />
+
+                <!-- ID -->
+                <Label name="$(parent)ID" font="ZoFontGame" color="cfdcbd" wrapMode="ELLIPSIS"
+                       verticalAlignment="CENTER" horizontalAlignment="LEFT">
+                    <Dimensions x="50" y="28" />
+                    <Anchor point="CENTERLEFT" relativeTo="$(parent)" offsetX="10" />
+                </Label>
+
+                <!-- Buyer -->
+                <Label name="$(parent)Buyer" font="ZoFontGame" color="cfdcbd" wrapMode="ELLIPSIS"
+                       verticalAlignment="CENTER" horizontalAlignment="LEFT">
+                    <Dimensions x="150" y="28" />
+                    <Anchor point="CENTERLEFT" relativeTo="$(parent)" offsetX="70" />
+                </Label>
+
+                <!-- Guild name -->
+                <Label name="$(parent)Guild" font="ZoFontGame" color="cfdcbd" wrapMode="ELLIPSIS"
+                       verticalAlignment="CENTER" horizontalAlignment="LEFT">
+                    <Dimensions x="210" y="28" />
+                    <Anchor point="CENTERLEFT" relativeTo="$(parent)" offsetX="230" />
+                </Label>
+
+                <!-- Item icon -->
+                <Texture name="$(parent)Icon" alpha="1">
+                    <Dimensions x="28" y="28" />
+                    <Anchor point="TOPLEFT" relativeTo="$(parent)" offsetX="450" />
+                    <TextureCoords left="0" right="1" top="0" bottom="1" />
+                </Texture>
+
+                <!-- Item name -->
+                <Label name="$(parent)Item" font="ZoFontGame" color="cfdcbd" wrapMode="ELLIPSIS"
+                       verticalAlignment="CENTER" horizontalAlignment="LEFT">
+                    <Dimensions x="200" y="28" />
+                    <Anchor point="CENTERLEFT" relativeTo="$(parent)" offsetX="490" />
+                </Label>
+
+                <!-- Price -->
+                <Label name="$(parent)Price" font="ZoFontGame" color="cfdcbd" wrapMode="ELLIPSIS"
+                       verticalAlignment="CENTER" horizontalAlignment="LEFT">
+                    <Dimensions x="100" y="28" />
+                    <Anchor point="CENTERLEFT" relativeTo="$(parent)" offsetX="700" />
+                </Label>
+
+                <!-- Quantity -->
+                <Label name="$(parent)Quantity" font="ZoFontGame" color="cfdcbd" wrapMode="ELLIPSIS"
+                       verticalAlignment="CENTER" horizontalAlignment="LEFT">
+                    <Dimensions x="50" y="28" />
+                    <Anchor point="CENTERLEFT" relativeTo="$(parent)" offsetX="810" />
+                </Label>
+
+                <!-- Time -->
+                <Label name="$(parent)Time" font="ZoFontGame" color="cfdcbd" wrapMode="ELLIPSIS"
+                       verticalAlignment="CENTER" horizontalAlignment="LEFT">
+                    <Dimensions x="150" y="28" />
+                    <Anchor point="CENTERLEFT" relativeTo="$(parent)" offsetX="870" />
+                </Label>
+
+            </Controls>
+        </Button>
+    </Controls>
+</GuiXml>

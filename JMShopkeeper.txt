@@ -1,0 +1,11 @@
+## Title: JMShopkeeper
+## APIVersion: 100011
+## DependsOn: JMGuildSaleHistoryTracker
+## SavedVariables: JMShopkeeperSavedVariables
+## Version: 0.1
+## Author: Jordy Moos
+## Description: Shopkeeper
+
+JMShopkeeper.xml
+
+JMShopkeeper.lua
