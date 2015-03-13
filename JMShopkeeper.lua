@@ -21,8 +21,9 @@ local Config = {
 ---
 -- Parser object
 --
-local Parser = {
-}
+local Parser = {}
+
+local ToggleStatus = 'sales'
 
 --[[
 
@@ -40,6 +41,7 @@ local ResultTable = {
 
 local ParsedData = {
     saleList = {},
+    buyList = {},
     guildList = {},
 }
 
@@ -71,6 +73,17 @@ function ResultTable:initialize()
         Parser:parse()
     end)
 
+    -- Let toggle button work
+    JMShopkeeperGuiMainWindowToggleButton:SetHandler('OnClicked', function()
+        if ToggleStatus == 'sales' then
+            ToggleStatus = 'buys'
+        else
+            ToggleStatus = 'sales'
+        end
+        ResultTable:draw()
+        ResultTable:resetPosition()
+    end)
+
     local saleList = JMGuildSaleHistoryTracker.getSalesFromUser("@Player")
 end
 
@@ -92,9 +105,13 @@ end
 --
 function ResultTable:adjustPosition(direction)
     local newPosition = self.position + direction;
+    local maxPosition = #ParsedData.saleList
+    if ToggleStatus == 'buys' then
+        maxPosition = #ParsedData.buyList
+    end
 
-    if (newPosition > #ParsedData.saleList - self.rowCount) then
-        newPosition = #ParsedData.saleList - self.rowCount
+    if (newPosition > maxPosition - self.rowCount) then
+        newPosition = maxPosition - self.rowCount
     end
 
     if (newPosition < 1) then
@@ -108,24 +125,43 @@ end
 --
 function ResultTable:draw()
     for rowIndex = 1, self.rowCount do
-        local sale = ParsedData.saleList[rowIndex + self.position]
-        if (sale == nil) then
-            return
-        end
+        if ToggleStatus == 'sales' then
 
-        local icon = GetItemLinkInfo(sale.itemLink)
-        local resultRow = self.rowList[rowIndex]
-        resultRow:GetNamedChild('ID'):SetText((rowIndex + self.position))
-        resultRow:GetNamedChild('Buyer'):SetText(sale.buyer)
-        resultRow:GetNamedChild('Guild'):SetText(sale.guildName)
-        resultRow:GetNamedChild('Icon'):SetTexture(icon)
-        resultRow:GetNamedChild('Item'):SetText(zo_strformat('<<t:1>>', sale.itemLink))
-        resultRow:GetNamedChild('Price'):SetText(sale.price)
-        resultRow:GetNamedChild('Quantity'):SetText(sale.quantity)
-        resultRow:GetNamedChild('Time'):SetText(ZO_FormatDurationAgo(GetTimeStamp() - sale.saleTimestamp))
+            local sale = ParsedData.saleList[rowIndex + self.position]
+            if (sale == nil) then
+                return
+            end
+
+            local icon = GetItemLinkInfo(sale.itemLink)
+            local resultRow = self.rowList[rowIndex]
+            resultRow:GetNamedChild('ID'):SetText((rowIndex + self.position))
+            resultRow:GetNamedChild('Buyer'):SetText(sale.buyer)
+            resultRow:GetNamedChild('Guild'):SetText(sale.guildName)
+            resultRow:GetNamedChild('Icon'):SetTexture(icon)
+            resultRow:GetNamedChild('Item'):SetText(zo_strformat('<<t:1>>', sale.itemLink))
+            resultRow:GetNamedChild('Price'):SetText(sale.price)
+            resultRow:GetNamedChild('Quantity'):SetText(sale.quantity)
+            resultRow:GetNamedChild('Time'):SetText(ZO_FormatDurationAgo(GetTimeStamp() - sale.saleTimestamp))
+        else
+            local sale = ParsedData.buyList[rowIndex + self.position]
+            if (sale == nil) then
+                return
+            end
+
+            local icon = GetItemLinkInfo(sale.itemLink)
+            local resultRow = self.rowList[rowIndex]
+            resultRow:GetNamedChild('ID'):SetText((rowIndex + self.position))
+            resultRow:GetNamedChild('Buyer'):SetText(sale.seller)
+            resultRow:GetNamedChild('Guild'):SetText(sale.guildName)
+            resultRow:GetNamedChild('Icon'):SetTexture(icon)
+            resultRow:GetNamedChild('Item'):SetText(zo_strformat('<<t:1>>', sale.itemLink))
+            resultRow:GetNamedChild('Price'):SetText(sale.price)
+            resultRow:GetNamedChild('Quantity'):SetText(sale.quantity)
+            resultRow:GetNamedChild('Time'):SetText(ZO_FormatDurationAgo(GetTimeStamp() - sale.saleTimestamp))
+        end
     end
 
-    JMShopkeeperResultPaginationSummary:SetText((self.position + 1) .. ' - ' .. (self.position + self.rowCount) .. ' of ' .. #ParsedData.saleList)
+--    JMShopkeeperResultPaginationSummary:SetText((self.position + 1) .. ' - ' .. (self.position + self.rowCount) .. ' of ' .. #ParsedData.saleList)
 end
 
 --[[
@@ -152,11 +188,27 @@ function Parser:parse()
         guildList[sale.guildName] = guildList[sale.guildName] + 1
     end
 
+    d(guildList)
+
     ParsedData.guildList = guildList
     ParsedData.saleList = salesList
 
+    -- Buys
+    Parser:parseBuyList()
+
     ResultTable:resetPosition()
     ResultTable:draw()
+end
+
+---
+--
+function Parser:parseBuyList()
+    local buyList = JMGuildBuyHistoryTracker.getAll(GetDisplayName())
+    table.sort(buyList, function(a, b)
+        return a.saleTimestamp > b.saleTimestamp
+    end)
+
+    ParsedData.buyList = buyList
 end
 
 --[[

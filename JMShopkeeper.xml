@@ -23,6 +23,12 @@
                     Main window buttons
                 -->
 
+                <!-- Toggle button -->
+                <Button name="$(parent)ToggleButton" inherits="ZO_DefaultButton" text="Toggle">
+                    <Dimensions x="120" y="30" />
+                    <Anchor point="BOTTOMRIGHT" offsetX="-235" offsetY="-20" />
+                </Button>
+
                 <!-- Fetch button -->
                 <Button name="$(parent)FetchButton" inherits="ZO_DefaultButton" text="Fetch">
                     <Dimensions x="120" y="30" />
